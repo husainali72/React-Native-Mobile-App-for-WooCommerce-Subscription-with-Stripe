@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   View,
   Text,
-  Picker,
+  TouchableOpacity,
   Platform,
   Dimensions,
 } from 'react-native';
@@ -15,20 +15,26 @@ import {
   ActivityIndicator,
   HelperText,
 } from 'react-native-paper';
-import DatePicker from 'react-native-datepicker';
+// import DatePicker from 'react-native-datepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+
 import RNPickerSelect from 'react-native-picker-select';
 import * as yup from 'yup';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import validationSchema from './valdiationSchema';
 import initialFormValues from './initialFormValue';
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
 
 const CheckOut = props => {
-  const {colors} = props.theme;
+  const { colors } = props.theme;
   const windowWidth = Dimensions.get('window').width;
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [plan, setPlan] = useState(true);
+  const [openDatepicker, setopenDatePicker] = useState(false);
   const [coupondata, setCoupondata] = useState(null);
+  const [dateselect, setdateselect] = useState(new Date());
   const [value, setValue] = useState({
     firstname: '',
     lastname: '',
@@ -43,60 +49,60 @@ const CheckOut = props => {
     gender: 'female',
     preferredLanguage: 'english',
     states: [
-      {value: 'AL', label: 'Alabama', key: 'AL'},
-      {value: 'AK', label: 'Alaska', key: 'AK'},
-      {value: 'AZ', label: 'Arizona', key: 'AZ'},
-      {value: 'AR', label: 'Arkansas', key: 'AR'},
-      {value: 'CA', label: 'California', key: 'CA'},
-      {value: 'CO', label: 'Colorado', key: 'CO'},
-      {value: 'CT', label: 'Connecticut', key: 'CT'},
-      {value: 'DE', label: 'Delaware', key: 'DE'},
-      {value: 'DC', label: 'District Of Columbia', key: 'DC'},
-      {value: 'FL', label: 'Florida', key: 'FL'},
-      {value: 'GA', label: 'Georgia', key: 'GA'},
-      {value: 'HI', label: 'Hawaii', key: 'HI'},
-      {value: 'ID', label: 'Idaho', key: 'ID'},
-      {value: 'IL', label: 'Illinois', key: 'IL'},
-      {value: 'IN', label: 'Indiana', key: 'IN'},
-      {value: 'IA', label: 'Iowa', key: 'IA'},
-      {value: 'KS', label: 'Kansas', key: 'KS'},
-      {value: 'KY', label: 'Kentucky', key: 'KY'},
-      {value: 'LA', label: 'Louisiana', key: 'LA'},
-      {value: 'ME', label: 'Maine', key: 'ME'},
-      {value: 'MD', label: 'Maryland', key: 'MD'},
-      {value: 'MA', label: 'Massachusetts', key: 'MA'},
-      {value: 'MI', label: 'Michigan', key: 'MI'},
-      {value: 'MN', label: 'Minnesota', key: 'MN'},
-      {value: 'MS', label: 'Mississippi', key: 'MS'},
-      {value: 'MO', label: 'Missouri', key: 'MO'},
-      {value: 'MT', label: 'Montana', key: 'MT'},
-      {value: 'NE', label: 'Nebraska', key: 'NE'},
-      {value: 'NV', label: 'Nevada', key: 'NV'},
-      {value: 'NH', label: 'New Hampshire', key: 'NH'},
-      {value: 'NJ', label: 'New Jersey', key: 'NJ'},
-      {value: 'NM', label: 'New Mexico', key: 'NM'},
-      {value: 'NY', label: 'New York', key: 'NY'},
-      {value: 'NC', label: 'North Carolina', key: 'NC'},
-      {value: 'ND', label: 'North Dakota', key: 'ND'},
-      {value: 'OH', label: 'Ohio', key: 'OH'},
-      {value: 'OK', label: 'Oklahoma', key: 'OK'},
-      {value: 'OR', label: 'Oregon', key: 'OR'},
-      {value: 'PA', label: 'Pennsylvania', key: 'PA'},
-      {value: 'RI', label: 'Rhode Island', key: 'RI'},
-      {value: 'SC', label: 'South Carolina', key: 'SC'},
-      {value: 'SD', label: 'South Dakota', key: 'SD'},
-      {value: 'TN', label: 'Tennessee', key: 'TN'},
-      {value: 'TX', label: 'Texas', key: 'TX'},
-      {value: 'UT', label: 'Utah', key: 'UT'},
-      {value: 'VT', label: 'Vermont', key: 'VT'},
-      {value: 'VA', label: 'Virginia', key: 'VA'},
-      {value: 'WA', label: 'Washington', key: 'WA'},
-      {value: 'WV', label: 'West Virginia', key: 'WV'},
-      {value: 'WI', label: 'Wisconsin', key: 'WI'},
-      {value: 'WY', label: 'Wyoming', key: 'WY'},
-      {value: 'AA', label: 'Armed Forces (AA)', key: 'AA'},
-      {value: 'AE', label: 'Armed Forces (AE)', key: 'AE'},
-      {value: 'AP', label: 'Armed Forces (AP)', key: 'AP'},
+      { value: 'AL', label: 'Alabama', key: 'AL' },
+      { value: 'AK', label: 'Alaska', key: 'AK' },
+      { value: 'AZ', label: 'Arizona', key: 'AZ' },
+      { value: 'AR', label: 'Arkansas', key: 'AR' },
+      { value: 'CA', label: 'California', key: 'CA' },
+      { value: 'CO', label: 'Colorado', key: 'CO' },
+      { value: 'CT', label: 'Connecticut', key: 'CT' },
+      { value: 'DE', label: 'Delaware', key: 'DE' },
+      { value: 'DC', label: 'District Of Columbia', key: 'DC' },
+      { value: 'FL', label: 'Florida', key: 'FL' },
+      { value: 'GA', label: 'Georgia', key: 'GA' },
+      { value: 'HI', label: 'Hawaii', key: 'HI' },
+      { value: 'ID', label: 'Idaho', key: 'ID' },
+      { value: 'IL', label: 'Illinois', key: 'IL' },
+      { value: 'IN', label: 'Indiana', key: 'IN' },
+      { value: 'IA', label: 'Iowa', key: 'IA' },
+      { value: 'KS', label: 'Kansas', key: 'KS' },
+      { value: 'KY', label: 'Kentucky', key: 'KY' },
+      { value: 'LA', label: 'Louisiana', key: 'LA' },
+      { value: 'ME', label: 'Maine', key: 'ME' },
+      { value: 'MD', label: 'Maryland', key: 'MD' },
+      { value: 'MA', label: 'Massachusetts', key: 'MA' },
+      { value: 'MI', label: 'Michigan', key: 'MI' },
+      { value: 'MN', label: 'Minnesota', key: 'MN' },
+      { value: 'MS', label: 'Mississippi', key: 'MS' },
+      { value: 'MO', label: 'Missouri', key: 'MO' },
+      { value: 'MT', label: 'Montana', key: 'MT' },
+      { value: 'NE', label: 'Nebraska', key: 'NE' },
+      { value: 'NV', label: 'Nevada', key: 'NV' },
+      { value: 'NH', label: 'New Hampshire', key: 'NH' },
+      { value: 'NJ', label: 'New Jersey', key: 'NJ' },
+      { value: 'NM', label: 'New Mexico', key: 'NM' },
+      { value: 'NY', label: 'New York', key: 'NY' },
+      { value: 'NC', label: 'North Carolina', key: 'NC' },
+      { value: 'ND', label: 'North Dakota', key: 'ND' },
+      { value: 'OH', label: 'Ohio', key: 'OH' },
+      { value: 'OK', label: 'Oklahoma', key: 'OK' },
+      { value: 'OR', label: 'Oregon', key: 'OR' },
+      { value: 'PA', label: 'Pennsylvania', key: 'PA' },
+      { value: 'RI', label: 'Rhode Island', key: 'RI' },
+      { value: 'SC', label: 'South Carolina', key: 'SC' },
+      { value: 'SD', label: 'South Dakota', key: 'SD' },
+      { value: 'TN', label: 'Tennessee', key: 'TN' },
+      { value: 'TX', label: 'Texas', key: 'TX' },
+      { value: 'UT', label: 'Utah', key: 'UT' },
+      { value: 'VT', label: 'Vermont', key: 'VT' },
+      { value: 'VA', label: 'Virginia', key: 'VA' },
+      { value: 'WA', label: 'Washington', key: 'WA' },
+      { value: 'WV', label: 'West Virginia', key: 'WV' },
+      { value: 'WI', label: 'Wisconsin', key: 'WI' },
+      { value: 'WY', label: 'Wyoming', key: 'WY' },
+      { value: 'AA', label: 'Armed Forces (AA)', key: 'AA' },
+      { value: 'AE', label: 'Armed Forces (AE)', key: 'AE' },
+      { value: 'AP', label: 'Armed Forces (AP)', key: 'AP' },
     ],
     state: '',
   });
@@ -203,14 +209,13 @@ const CheckOut = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    const totalPriceval = props.navigation.getParam('totalPrice', 0);
-    const plandata = props.navigation.getParam('plan', '');
-    const couponData = props.navigation.getParam('couponData', '');
+    const totalPriceval = props.route.params.totalPrice //props.navigation.getParam('totalPrice', 0);
+    const plandata = props.route.params.plan // props.navigation.getParam('plan', '');
+    const couponData = props.route.params.couponData // props.navigation.getParam('couponData', '');
     setCoupondata(couponData);
     setTotalPrice(totalPriceval);
     setPlan(plandata);
     setIsLoading(false);
-    console.log('couponData', couponData);
   }, [props.navigation]);
 
   const submit = val => {
@@ -290,6 +295,7 @@ const CheckOut = props => {
                       onChangeText={handleChange('email')}
                       onBlur={() => setFieldTouched('email')}
                       error={touched.email && errors.email ? true : false}
+                      autoCapitalize={'none'}
                     />
                     {touched.email && errors.email && (
                       <HelperText type="error">{errors.email}</HelperText>
@@ -344,49 +350,47 @@ const CheckOut = props => {
                       <HelperText type="error">{errors.phone}</HelperText>
                     )}
 
-                    <View
+                    <TouchableOpacity onPress={() => { setopenDatePicker(true) }}
                       style={{
                         borderWidth: 1,
                         borderColor: errors.birthdate ? '#b00020' : 'grey',
                         marginTop: 5,
+                        padding: 12
                       }}>
-                      <DatePicker
-                        style={{width: 275, height: 55}}
-                        date={values.birthdate}
-                        mode="date"
-                        placeholder="Birthdate "
-                        format="YYYY-MM-DD"
-                        minDate="1950-05-01"
-                        maxDate={new Date()}
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: 4,
-                            top: 13,
-                            marginLeft: 0,
-                          },
-                          dateInput: {
-                            marginLeft: 50,
-                            border: 'none',
-                            flex: 1,
-                            width: 275,
-                            borderWidth: 0,
-                            marginTop: 15,
-                            alignItems: 'flex-start',
-                          },
-                          placeholderText: {
-                            color: errors.birthdate ? '#b00020' : 'grey',
-                            fontSize: 16,
-                          },
-                          dateText: {
-                            width: 275,
-                          },
-                        }}
-                        onDateChange={date => setFieldValue('birthdate', date)}
-                      />
-                    </View>
+                      <Text style={styles.textInput} >{values.birthdate ? moment(values.birthdate).format('MMMM Do YYYY') : 'Birthdate'}</Text>
+                      {openDatepicker
+                        &&
+                        // <RNDateTimePicker 
+                        //   testID="datePicker"
+                        //   value={new Date()}
+                        //   mode={"date"}
+                        //   placeholder="Birthdate"
+                        //   minimumDate={new Date(1950, 0, 1)}
+                        //   maximumDate={new Date()}
+                        //   onChange={(e, selectedDate) => {
+                        //     setopenDatePicker(false)
+                        //     setFieldValue('birthdate', moment(selectedDate).format('YYYY-MM-DD'))
+
+                        //   }}
+                        // />}
+                        <DatePicker
+                          modal
+                          mode={'date'}
+                          open={openDatepicker}
+                          date={dateselect}
+                          minimumDate={new Date(1950, 0, 1)}
+                          maximumDate={new Date()}
+                          onConfirm={(date) => {
+                            setFieldValue('birthdate', moment(date).format('YYYY-MM-DD'));
+                            setopenDatePicker(false)
+                            setdateselect(date)
+                          }}
+                          onCancel={() => {
+                            setopenDatePicker(false)
+                          }}
+                        />
+                      }
+                    </TouchableOpacity>
                     {touched.birthdate && errors.birthdate && (
                       <HelperText type="error">{errors.birthdate}</HelperText>
                     )}
@@ -395,7 +399,7 @@ const CheckOut = props => {
                       <Text>Gender</Text>
                       <RadioButton.Group
                         onValueChange={getVal =>
-                          setValue({...value, gender: getVal})
+                          setValue({ ...value, gender: getVal })
                         }
                         value={value.gender}>
                         <View style={styles.row}>
@@ -410,7 +414,7 @@ const CheckOut = props => {
                             />
                             <Text
                               onPress={() =>
-                                setValue({...value, gender: 'male'})
+                                setValue({ ...value, gender: 'male' })
                               }>
                               Male{' '}
                             </Text>
@@ -426,7 +430,7 @@ const CheckOut = props => {
                             />
                             <Text
                               onPress={() =>
-                                setValue({...value, gender: 'female'})
+                                setValue({ ...value, gender: 'female' })
                               }>
                               Female{' '}
                             </Text>
@@ -439,7 +443,7 @@ const CheckOut = props => {
                       <Text>Preferred Language</Text>
                       <RadioButton.Group
                         onValueChange={getVal =>
-                          setValue({...value, preferredLanguage: getVal})
+                          setValue({ ...value, preferredLanguage: getVal })
                         }
                         value={value.preferredLanguage}>
                         <View style={styles.row}>
@@ -525,53 +529,54 @@ const CheckOut = props => {
                       <HelperText type="error">{errors.city}</HelperText>
                     )}
 
-                    {Platform.OS === 'ios' ? (
-                      <>
-                        <View
-                          style={[
-                            styles.iosInput,
-                            errors.state && styles.errorInput,
-                          ]}>
-                          <RNPickerSelect
-                            placeholder={{
-                              label: 'Select State',
-                              value: null,
-                              color: errors.state ? '#b00020' : 'grey',
-                            }}
-                            onValueChange={value =>
-                              setFieldValue('state', value)
-                            }
-                            items={value.states}
-                            useNativeAndroidPickerStyle={false}
-                            style={{
-                              placeholder: {
-                                color: errors.state ? '#b00020' : 'grey',
-                                fontSize: 16,
-                              },
-                              inputIOSContainer: {
-                                fontSize: 16,
-                              },
-                            }}
-                          />
-                        </View>
-                        {touched.state && errors.state && (
-                          <HelperText type="error">
-                            Please Select State
-                          </HelperText>
-                        )}
-                      </>
-                    ) : null}
+                    {/* {Platform.OS === 'ios' ? (
+                      <> */}
+                    <View
+                      style={[
+                        styles.iosInput,
+                        errors.state && styles.errorInput,
+                      ,{paddingVertical:0}]}>
+                      <RNPickerSelect
+                        placeholder={{
+                          label: 'Select State',
+                          value: values.state,
+                          color: errors.state ? '#b00020' : 'grey',
+                        }}
+                        onValueChange={(value) =>
+                         { console.log('value',value),
+                          setFieldValue('state', value)}
+                        }
+                        items={value.states}
+                        useNativeAndroidPickerStyle={false}
+                        style={{
+                          placeholder: {
+                            color: errors.state ? '#b00020' : 'grey',
+                            fontSize: 16,
+                          },
+                          inputIOSContainer: {
+                            fontSize: 16,
+                          },
+                        }}
+                      />
+                    </View>
+                    {errors.state && (
+                      <HelperText type="error">
+                        Please Select State
+                      </HelperText>
+                    )}
+                    {/* </>
+                    ) : null} */}
 
-                    {Platform.OS === 'android' ? (
+                    {/* {Platform.OS === 'android' ? (
                       <>
                         <View
                           style={[
                             styles.androidInput,
                             errors.state && styles.errorInput,
-                          ]}>
+                          ]}>                        
                           <Picker
                             selectedValue={values.state}
-                            style={{height: 50, flex: 1}}
+                            style={{ height: 50, flex: 1 }}
                             onValueChange={(itemValue, itemIndex) =>
                               itemValue !== '0' &&
                               // setValue({...value, state: itemValue})
@@ -597,7 +602,7 @@ const CheckOut = props => {
                           </HelperText>
                         )}
                       </>
-                    ) : null}
+                    ) : null} */}
 
                     <TextInput
                       style={styles.textInput}
@@ -618,7 +623,7 @@ const CheckOut = props => {
                       style={styles.submitBtn}
                       mode="contained"
                       disabled={!isValid}
-                      onPress={handleSubmit}>
+                      onPress={()=>{handleSubmit()}}>
                       Billing Process
                     </Button>
                   </>

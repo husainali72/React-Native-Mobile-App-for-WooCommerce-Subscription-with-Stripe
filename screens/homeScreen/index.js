@@ -69,7 +69,7 @@ const Home = props => {
       textAlign: 'center',
     },
     stepsWrapper: {
-      alignItems: 'center',
+      alignItems: windowWidth < 768 ? 'center' : 'flex-start',
       flexDirection: windowWidth < 768 ? 'column' : 'row',
       justifyContent: windowWidth < 768 ? 'center' : 'space-between',
     },
@@ -80,6 +80,7 @@ const Home = props => {
       borderWidth: 0.5,
       borderColor: '#ddd',
       width: windowWidth < 768 ? windowWidth - 20 : windowWidth / 3 - 20,
+      minHeight: windowWidth < 768 ? 'auto' : 200,
     },
     stepsTitle: {
       fontSize: 15,

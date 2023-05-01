@@ -10,30 +10,12 @@ import {
 } from 'react-native-paper';
 import WCAPI from '../../services/woocommerce';
 
-const Plans = props => {
+const Plans = (props) => {
   const {colors} = props.theme;
   const windowWidth = Dimensions.get('window').width;
 
   useEffect(() => {
     getProducts();
-
-    // Dummy Data
-    /*setplans([
-      {
-        id: 1,
-        regular_price: 25,
-        name: 'Weekly',
-        intervalType: 'Week',
-        signUpFee: 2.5,
-      },
-      {
-        id: 2,
-        regular_price: 100,
-        name: 'Monthly',
-        intervalType: 'Month',
-        signUpFee: 10,
-      },
-    ]);*/
   }, []);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -128,7 +110,7 @@ const Plans = props => {
     setisError(false);
 
     WCAPI.get('products', {type: 'subscription', status: 'publish'}).then(
-      data => {
+      (data) => {
         var plansData = data;
         for (var i = 0; i < plansData.length; i++) {
           for (var m = 0; m < plansData[i].meta_data.length; m++) {
@@ -151,14 +133,14 @@ const Plans = props => {
         setplans(plansData);
         setIsLoading(false);
       },
-      err => {
+      (err) => {
         console.log(err);
         setisError(true);
       },
     );
   };
 
-  const Register = plan => {
+  const Register = (plan) => {
     props.navigation.navigate('CartNavigator', {
       plan: plan,
     });

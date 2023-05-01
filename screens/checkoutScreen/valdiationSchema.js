@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
     .string()
     .required()
     .label('Confirm password')
-    .test('passwords-match', 'Passwords must match ya fool', function(value) {
+    .test('passwords-match', 'Passwords must match', function(value) {
       return this.parent.password === value;
     }),
   phone: yup

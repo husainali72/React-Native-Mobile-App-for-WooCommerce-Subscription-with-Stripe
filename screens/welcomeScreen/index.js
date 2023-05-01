@@ -6,15 +6,17 @@ import {
   ImageBackground,
   StatusBar,
   Platform,
+  Dimensions,
 } from 'react-native';
 import {Button, Paragraph, withTheme} from 'react-native-paper';
 import OneSignal from 'react-native-onesignal';
 
 const WelcomeScreen = props => {
-  useEffect(() => {
-    OneSignal.addEventListener('opened', onOpened);
-    return () => OneSignal.removeEventListener('opened', onOpened);
-  });
+  const windowwidth = Dimensions.get('window').width;
+  // useEffect(() => {
+  //   OneSignal.addEventListener('opened', onOpened);
+  //   return () => OneSignal.removeEventListener('opened', onOpened);
+  // });
 
   const onOpened = openResult => {
     props.navigation.navigate('Message');
@@ -56,11 +58,12 @@ const WelcomeScreen = props => {
       fontSize: 16,
       lineHeight: 25,
       textAlign: 'center',
+      width: windowwidth < 768 ? 'auto' : 275,
     },
     vector: {width: 275, height: 95, marginTop: 45},
     logo: {
       width: 275,
-      // height: 85,
+      height: 85,
       marginBottom: 20,
     },
   });
@@ -91,8 +94,8 @@ const WelcomeScreen = props => {
             </Button>
           </View>
           <Paragraph style={styles.paragraph}>
-            Company works with Telehealth Professionals to ensure the best
-            doctor experience possible for you.
+            Everywhere.care works with Telehealth Professionals to ensure the
+            best doctor experience possible for you.
           </Paragraph>
           <View style={{alignItems: 'center'}}>
             <Image
