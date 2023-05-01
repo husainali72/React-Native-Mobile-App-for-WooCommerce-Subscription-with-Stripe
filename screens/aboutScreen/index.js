@@ -9,7 +9,7 @@ import {
   Appbar,
 } from 'react-native-paper';
 
-const About = props => {
+const About = (props) => {
   const {colors} = props.theme;
   const styles = {
     innerContainer: {
@@ -107,7 +107,7 @@ const About = props => {
         </View>
         <View style={styles.innerContainer}>
           <Title style={styles.aboutTitle}>
-            LET Company Name TAKE A LOAD OFF AND HELP SIMPLIFY YOUR MEDICAL
+            LET EVERYWHERE.CARE TAKE A LOAD OFF AND HELP SIMPLIFY YOUR MEDICAL
             NEEDS.
           </Title>
           <Paragraph style={styles.aboutParagraph}>
@@ -128,19 +128,19 @@ const About = props => {
             </Button>
           </View>
           <Title style={styles.aboutSecondTitle}>
-            Company Name HAS A PLAN FOR BUSY FOLKS LIKE YOU!
+            EVERYWHERE.CARE HAS A PLAN FOR BUSY FOLKS LIKE YOU!
           </Title>
           <Paragraph style={styles.aboutSecondParagraph}>
-            Company Name works with Telehealth Professionals to ensure the best
-            doctor experience possible for you.
+            Everywhere.care works with Telehealth Professionals to ensure the
+            best doctor experience possible for you.
           </Paragraph>
-          <View style={styles.accordianwrapper}>
+          {/* <View style={styles.accordianwrapper}>
             <List.Accordion
-              title="REGISTER WITH Company Name"
+              title="REGISTER WITH EVERYWHERE.CARE"
               style={styles.accordion}
               titleStyle={styles.accordionTitle}>
               <List.Item
-                title="Simply register with Company Name then check your email for further instructions. We will get you on your way to feeling better quickly."
+                title="Simply register with Everywhere.care then check your email for further instructions. We will get you on your way to feeling better quickly."
                 titleNumberOfLines={12}
                 titleStyle={styles.accordianDescription}
               />
@@ -160,7 +160,7 @@ const About = props => {
               style={styles.accordion}
               titleStyle={styles.accordionTitle}>
               <List.Item
-                title="We understand that with the rising costs of healthcare, doctor’s office, urgent care clinics and Emergency Room visits can be very expensive. While Company Name is not offering health insurance, access to this amazing service is both affordable and convenient."
+                title="We understand that with the rising costs of healthcare, doctor’s office, urgent care clinics and Emergency Room visits can be very expensive. While Everywhere.care is not offering health insurance, access to this amazing service is both affordable and convenient."
                 titleNumberOfLines={12}
                 titleStyle={styles.accordianDescription}
               />
@@ -175,7 +175,7 @@ const About = props => {
                 titleStyle={styles.accordianDescription}
               />
             </List.Accordion>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </>

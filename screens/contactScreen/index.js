@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   View,
@@ -9,10 +9,10 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import {withTheme, Appbar} from 'react-native-paper';
+import { withTheme, Title, Paragraph, Appbar } from 'react-native-paper';
 
 const Contact = props => {
-  const {colors} = props.theme;
+  const { colors } = props.theme;
   const windowWidth = Dimensions.get('window').width;
   const styles = {
     mainContainer: {
@@ -40,7 +40,7 @@ const Contact = props => {
     contactDescription: {
       padding: 20,
     },
-    contactCardTitle: {color: colors.light, fontSize: 16, textAlign: 'center'},
+    contactCardTitle: { color: colors.light, fontSize: 16, textAlign: 'center' },
     contactTitle: {
       color: colors.primary,
       fontSize: 16,
@@ -107,7 +107,6 @@ const Contact = props => {
     } else {
       phoneNumber = `telprompt:${number}`;
     }
-    console.log(phoneNumber);
     Linking.openURL(phoneNumber);
   };
 
@@ -133,16 +132,16 @@ const Contact = props => {
                 <Text style={styles.contactTelTitle}>
                   Member Services Department
                 </Text>
-                <TouchableOpacity onPress={() => dialCall('xxxxxxxxxxxxxx')}>
-                  <Text style={styles.contactTel}>+1-202-555-0176</Text>
+                <TouchableOpacity onPress={() => dialCall('888-553-4941')}>
+                  <Text style={styles.contactTel}>888-533-4941</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.contactTelSecond}>
                 <Text style={styles.contactTelTitle}>
                   Institution, Billing, Sales, or other questions
                 </Text>
-                <TouchableOpacity onPress={() => dialCall('XXXXXXXXXXXXXXXX')}>
-                  <Text style={styles.contactTel}>+1-202-555-0177</Text>
+                <TouchableOpacity onPress={() => dialCall('844-267-8779')}>
+                  <Text style={styles.contactTel}>844-267-8779</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.contactTelSecond}>
@@ -150,10 +149,10 @@ const Contact = props => {
                 <TouchableOpacity
                   onPress={() =>
                     Linking.openURL(
-                      'mailto:info@example.com?subject=xxxxxx&body=Hello',
+                      'mailto:info@everywhere.care?subject=everywhere.care&body=Hello',
                     )
                   }>
-                  <Text style={styles.contactTel}>info@example.com</Text>
+                  <Text style={styles.contactTel}>info@everywhere.care</Text>
                 </TouchableOpacity>
               </View>
             </View>

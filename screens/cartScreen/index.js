@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   View,
@@ -19,10 +19,10 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native-paper';
-import {getCustomApiBase} from '../../services/config';
+import { getCustomApiBase } from '../../services/config';
 
-const Cart = props => {
-  const {colors} = props.theme;
+const Cart = (props) => {
+  const { colors } = props.theme;
   const [isLoading, setIsLoading] = useState(true);
   const [plan, setplan] = useState(null);
   const [dialog, setDialog] = useState(false);
@@ -175,7 +175,7 @@ const Cart = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    const plandata = props.navigation.getParam('plan', null);
+    const plandata = props.route.params.plan //props.navigation.getParam('plan', null);
     if (plandata === null) {
       setplan(null);
     } else {
@@ -201,7 +201,6 @@ const Cart = props => {
     setCouponError(null);
     setIsLoading(true);
     setDiscount(0);
-
     var data = {
       code: couponCode,
       product_id: plan.id,
@@ -216,7 +215,6 @@ const Cart = props => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
         if (data.code === 401) {
           setCouponError(data.message);
           setIsLoading(false);
@@ -307,9 +305,8 @@ const Cart = props => {
         }
       })
       .catch(error => {
-        console.error('Error:', error);
-        setCouponError('Something went wrong');
         setIsLoading(false);
+        setCouponError('Something went wrong');
       });
   };
 
@@ -319,8 +316,7 @@ const Cart = props => {
   };
 
   const navigateToCheckout = () => {
-    var totalPrice =
-      parseFloat(plan.signUpFee + plan.regular_price) - parseFloat(discount);
+    var totalPrice = parseFloat(plan.total_fee) - parseFloat(discount);
     props.navigation.navigate('CheckOutNavigator', {
       totalPrice: totalPrice,
       plan: plan,
@@ -345,7 +341,7 @@ const Cart = props => {
               <Button
                 mode="contained"
                 style={styles.planBtn}
-                onPress={() => props.navigation.navigate('PlansNavigator')}>
+                onPress={() => props.navigation.navigate('Plans')}>
                 <Text>plan</Text>
               </Button>
             </View>
@@ -424,10 +420,7 @@ const Cart = props => {
                           </DataTable.Cell>
                           <DataTable.Cell numeric>
                             <Subheading>
-                              ${' '}
-                              {parseFloat(
-                                plan.signUpFee + plan.regular_price,
-                              ).toFixed(2)}
+                              $ {parseFloat(plan.total_fee).toFixed(2)}
                             </Subheading>
                           </DataTable.Cell>
                         </DataTable.Row>
@@ -444,12 +437,13 @@ const Cart = props => {
                       </Text>
                     </View>
                     <View style={styles.couponCard}>
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         <TextInput
                           label="Coupon Code"
                           value={couponCode}
                           onChangeText={text => setCouponCode(text)}
                           mode="outlined"
+                          autoCapitalize={'none'}
                           style={[
                             styles.textInput,
                             appliedCouponCode === true
@@ -497,10 +491,7 @@ const Cart = props => {
                           </DataTable.Cell>
                           <DataTable.Cell numeric>
                             <Title style={styles.carttd}>
-                              ${' '}
-                              {parseFloat(
-                                plan.signUpFee + plan.regular_price,
-                              ).toFixed(2)}
+                              $ {parseFloat(plan.total_fee).toFixed(2)}
                             </Title>
                           </DataTable.Cell>
                         </DataTable.Row>
@@ -523,9 +514,7 @@ const Cart = props => {
                           <DataTable.Cell numeric>
                             <Title style={styles.carttd}>
                               ${' '}
-                              {parseFloat(
-                                plan.signUpFee + plan.regular_price - discount,
-                              ).toFixed(2)}
+                              {parseFloat(plan.total_fee - discount).toFixed(2)}
                             </Title>
                           </DataTable.Cell>
                         </DataTable.Row>

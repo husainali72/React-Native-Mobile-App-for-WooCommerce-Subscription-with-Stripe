@@ -23,12 +23,12 @@ const initialFormValues = {
   city: '',
   zipcode: '',
   phone: '',
-  country: 'United States (US)',
+  country: 'US',
   birthdate: '',
   password: '',
   confirm_password: '',
-  gender: '',
-  preferredLanguage: '',
+  gender: 'female',
+  preferredLanguage: 'english',
   state: '',
 };
 

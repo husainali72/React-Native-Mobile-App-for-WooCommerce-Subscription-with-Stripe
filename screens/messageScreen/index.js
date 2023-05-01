@@ -108,7 +108,6 @@ const Message = props => {
     var increaseLimit = limit + 5;
     setLimit(increaseLimit);
   };
-
   return (
     <>
       {isLoading === true ? (

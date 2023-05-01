@@ -10,7 +10,11 @@ import {
 } from 'react-native';
 import {withTheme, Button, Title, ActivityIndicator} from 'react-native-paper';
 import {CreditCardInput} from 'react-native-credit-card-input';
-import {getStripeKey, getCustomApiBase} from '../../services/config';
+import {
+  getStripeKey,
+  getCustomApiBase,
+  getApiBase,
+} from '../../services/config';
 import WCAPI from '../../services/woocommerce';
 import WCAPIv1 from '../../services/woocommercev1';
 
@@ -140,16 +144,22 @@ const Billing = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    const cstmrInfo = props.navigation.getParam('cstmrInfo', '');
-    const plandata = props.navigation.getParam('planData', '');
-    const totalPriceval = props.navigation.getParam('totalPriceData', 0);
-    const couponData = props.navigation.getParam('couponData', '');
+    const cstmrInfo = props.route.params.cstmrInfo //props.navigation.getParam('cstmrInfo', '');
+    const plandata =  props.route.params.planData//props.navigation.getParam('planData', '');
+    const totalPriceval = props.route.params.totalPriceData//props.navigation.getParam('totalPriceData', 0);
+    const couponData = props.route.params.couponData //props.navigation.getParam('couponData', '');
     setCoupondata(couponData);
     setCustomerInfo(cstmrInfo);
     setPlan(plandata);
     setTotalPrice(totalPriceval);
     setIsLoading(false);
   }, [props.navigation]);
+
+  useEffect(() => {
+    if (customerInfo && customerInfo.subscription_id) {
+      AddUserTeleMedia(customerInfo);
+    }
+  }, [customerInfo]);
 
   const padLeft = (strval, n = 2) => {
     return Array(n - String(strval).length + 1).join('0') + strval;
@@ -439,11 +449,39 @@ const Billing = props => {
           ...customerInfo,
           subscription_id: subscriptionID,
         });
-        OrderPut(subscr_data.parent_id, orderStatus);
       })
       .catch(error => {
         handleError(
           'Some error occurs while making subscription. Please try again later.',
+        );
+      });
+  };
+
+  const AddUserTeleMedia = customerInfoVal => {
+    var cstminfo = customerInfoVal;
+    fetch(getCustomApiBase + 'telemedia', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'post',
+      body: JSON.stringify(cstminfo),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data['code'] > 250) {
+          props.navigation.navigate('ThankyouNavigator', {
+            title: 'Oops!',
+            body: data['message'],
+            type: 'error',
+          });
+          return;
+        }
+        OrderPut(subscr_data.parent_id, orderStatus);
+      })
+      .catch(error => {
+        handleError(
+          'Some error occurs while registeration to the portal. Please try again later.',
         );
       });
   };
@@ -505,7 +543,7 @@ const Billing = props => {
           </View>
           <ScrollView style={styles.mainContainer}>
             <View style={styles.innerContainer}>
-              <View style={styles.cardinfo}>
+              <View style={[styles.cardinfo]}>
                 <Image
                   source={require('../../assets/icons/visa.png')}
                   style={styles.cardImg}

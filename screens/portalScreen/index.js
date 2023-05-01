@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {ScrollView, Dimensions, View, Text} from 'react-native';
-import {WebView} from 'react-native-webview';
-import {Appbar, ActivityIndicator, withTheme} from 'react-native-paper';
+import React, { useState } from 'react';
+import { ScrollView, Dimensions, View, Text } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { Appbar, ActivityIndicator, withTheme } from 'react-native-paper';
 
 const Portal = props => {
-  const {colors} = props.theme;
+  const { colors } = props.theme;
   const [isLoading, setIsLoading] = useState(false);
 
   const styles = {
@@ -23,6 +23,7 @@ const Portal = props => {
       flex: 1,
       height: Dimensions.get('window').height - 100,
       backgroundColor: '#fff',
+      width: Dimensions.get('window').width,
     },
     appbar: {
       height: 40,
@@ -53,15 +54,22 @@ const Portal = props => {
               title="Portal Login"
             />
           </Appbar>
-          <ScrollView style={styles.mainContainer}>
+          {/* <ScrollView style={styles.mainContainer}>
             <WebView
               style={styles.webview}
-              source={{uri: 'https://google.com/'}}
+              source={{uri: 'https://portal.campusrxnow.com/'}}
               javaScriptEnabled={true}
               domStorageEnabled={true}
               startInLoadingState={true}
             />
-          </ScrollView>
+          </ScrollView> */}
+          <WebView
+            style={styles.webview}
+            source={{ uri: 'https://portal.campusrxnow.com/' }}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            startInLoadingState={true}
+          />
         </>
       )}
     </>

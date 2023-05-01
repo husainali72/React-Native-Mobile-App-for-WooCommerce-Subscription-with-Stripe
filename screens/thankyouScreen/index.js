@@ -4,13 +4,24 @@ import {withTheme, Button, Appbar, Title, Paragraph} from 'react-native-paper';
 
 const Thankyou = props => {
   useEffect(() => {
-    const titleRec = props.navigation.getParam('title', '');
-    const bodyRec = props.navigation.getParam('body', '');
-    const typeRec = props.navigation.getParam('type', 0);
+    const titleRec =!isEmpty(props.route.params)?props.route.params.title:'' //props.navigation.getParam('title', '');
+    const bodyRec =!isEmpty(props.route.params.body)?props.route.params.body:''  // props.navigation.getParam('body', '');
+    const typeRec = !isEmpty(props.route.params.type)?props.route.params.type:0 //props.navigation.getParam('type', 0);
     setTitle(titleRec);
     setBody(bodyRec);
     setType(typeRec);
   }, [props.navigation]);
+
+  const isEmpty = (value) =>
+  {
+  
+    value === null ||
+    (typeof value === 'object' && Object.keys(value).length === 0) ||
+    (typeof value === 'string' && value.trim().length === 0);
+    console.log(c,'c')
+    return c
+   
+  }
 
   const {colors} = props.theme;
   const [title, setTitle] = useState('');
@@ -71,6 +82,9 @@ const Thankyou = props => {
 
   return (
     <ScrollView style={styles.mainContainer}>
+      {/* <Appbar style={styles.appbar}>
+        <Appbar.Content titleStyle={styles.subheader} title="Thank you" />
+      </Appbar> */}
       <View style={styles.innerContainer}>
         <View style={styles.thankyouCard}>
           <View style={styles.thankyouInnerCard}>
